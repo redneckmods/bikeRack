@@ -1,5 +1,61 @@
 config = {}
-config.vehicle = `f150`
-config.bicycle = `scorcher`
-config.modkit = 1
-config.modkitType = 5
+config.vehicle = {
+    {
+        vehicle = `f150`,
+        mType=5,
+        mId=1
+    },
+    {
+        vehicle = `ardent`,
+        mType=0,
+        mId=1
+    },
+    {
+        vehicle = `comet3`,
+        mType=5,
+        mId=1
+    },
+    {
+        vehicle = `comet3`,
+        mType=5,
+        mId=1
+    },
+    {
+        vehicle = `comet3`,
+        mType=5,
+        mId=1
+    },
+    {
+        vehicle = `comet3`,
+        mType=5,
+        mId=1
+    },
+    {
+        vehicle = `comet3`,
+        mType=5,
+        mId=1
+    },
+    {
+        vehicle = `comet3`,
+        mType=5,
+        mId=1
+    },
+    {
+        vehicle = `comet3`,
+        mType=5,
+        mId=1
+    },
+    {
+        vehicle = `comet3`,
+        mType=5,
+        mId=1
+    },
+    {
+        vehicle = `comet3`,
+        mType=5,
+        mId=1
+    },
+}
+config.bike = {
+    'scorcher',
+}
