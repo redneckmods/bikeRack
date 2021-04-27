@@ -8,12 +8,9 @@ Citizen.CreateThread(function()
         if IsPedInAnyVehicle(PlayerPedId(),true) then
             if GetEntitySpeed(GetVehiclePedIsIn(PlayerPedId())) <=2.0 then
                 if has_valueV(config.vehicle,GetEntityModel(GetVehiclePedIsIn(PlayerPedId()))) or has_value(config.bike,GetEntityModel(GetVehiclePedIsIn(PlayerPedId()))) then
-                    
                     if has_value(config.bike,GetEntityModel(GetVehiclePedIsIn(PlayerPedId()))) then
                         lastBike = GetVehiclePedIsIn(PlayerPedId())
-                        print('thiiiiis',lastVehicle,GetEntityAttachedTo(lastBike))
                         if lastVehicle ~= nil and GetEntityAttachedTo(lastBike) == 0 then
-                            
                             if #(GetEntityCoords(lastVehicle)-GetEntityCoords(lastBike)) <= 10.0 then
                                 DrawMessage('Press ~g~E~w~ to attach')
                                 sleeptime = 5
