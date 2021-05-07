@@ -2,6 +2,7 @@
 local lastVehicle = nil
 local lastBike = nil
 local vehicleId = nil
+local bikeId = nil
 Citizen.CreateThread(function()
     local sleeptime = 1500
     while true do
@@ -17,14 +18,14 @@ Citizen.CreateThread(function()
                                 if IsControlJustPressed(0,38) then
                                     TaskLeaveVehicle(PlayerPedId(),lastBike,0)
                                     Wait(1500)
-                                    AttachEntityToEntity(lastBike,lastVehicle,GetEntityBoneIndexByName(lastVehicle,'mod_col_2'),0.0,-1.0,2.2,0.0,0.0,0.0,0,0,1,0,1,1)
+                                    AttachEntityToEntity(lastBike,lastVehicle,GetEntityBoneIndexByName(lastVehicle,'mod_col_2'),config.vehicle[vehicleId].offset,config.bike[bikeId].rot,0,0,1,0,1,1)
                                 end
                             end
                         end
                     else
                         if vehicleId ~= nil then
                             SetVehicleModKit(GetVehiclePedIsIn(PlayerPedId()),0)
-                        --    print(GetVehicleMod(GetVehiclePedIsIn(PlayerPedId()),config.vehicle[vehicleId].mType))
+                           print(GetVehicleMod(GetVehiclePedIsIn(PlayerPedId()),config.vehicle[vehicleId].mType))
                             if GetVehicleMod(GetVehiclePedIsIn(PlayerPedId()),config.vehicle[vehicleId].mType) == config.vehicle[vehicleId].mId then
                                 lastVehicle = GetVehiclePedIsIn(PlayerPedId())
                                 local vehs = GetGamePool('CVehicle')
@@ -36,6 +37,7 @@ Citizen.CreateThread(function()
                                             local coords = GetEntityCoords(lastVehicle)
                                             DetachEntity(vehs[i],0,0)
                                             SetEntityCoords(vehs[i],coords.x,coords.y+3.0,coords.z-5.0,false, false, false,false)
+                                            sleeptime = 1500
                                         end
                                     break
                                     end
@@ -72,12 +74,13 @@ function DrawMessage (message)
 end
 
 function has_value(tab, val)
-    for index, value in ipairs(tab) do
-        if GetHashKey(value) == val then
-            return true
+    for i=1,#tab,1 do
+        local vehicle = tab[i].bike
+        if vehicle == val then
+            bikeId = i
+            return i
         end
     end
-
     return false
 end
 function has_valueV(tab, val)
