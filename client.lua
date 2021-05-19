@@ -13,9 +13,9 @@ Citizen.CreateThread(function()
                         lastBike = GetVehiclePedIsIn(PlayerPedId())
                         if lastVehicle ~= nil and GetEntityAttachedTo(lastBike) == 0 then
                             if #(GetEntityCoords(lastVehicle)-GetEntityCoords(lastBike)) <= 10.0 then
-                                DrawMessage('Press ~g~E~w~ to attach')
+                                DrawMessage('Press ~g~K~w~ to attach')
                                 sleeptime = 5
-                                if IsControlJustPressed(0,38) then
+                                if IsControlJustPressed(0,311) then
                                     TaskLeaveVehicle(PlayerPedId(),lastBike,0)
                                     Wait(1500)
                                     AttachEntityToEntity(lastBike,lastVehicle,GetEntityBoneIndexByName(lastVehicle,'mod_col_2'),config.vehicle[vehicleId].offset,config.bike[bikeId].rot,0,0,1,0,1,1)
@@ -32,8 +32,8 @@ Citizen.CreateThread(function()
                                 for i=1,#vehs,1 do
                                     if GetEntityAttachedTo(vehs[i]) == lastVehicle then
                                         sleeptime = 5
-                                        DrawMessage('Press ~g~E~w~ to attach')
-                                        if IsControlJustPressed(0,38) then
+                                        DrawMessage('Press ~g~K~w~ to attach')
+                                        if IsControlJustPressed(0,311) then
                                             local coords = GetEntityCoords(lastVehicle)
                                             DetachEntity(vehs[i],0,0)
                                             SetEntityCoords(vehs[i],coords.x,coords.y+3.0,coords.z-5.0,false, false, false,false)
