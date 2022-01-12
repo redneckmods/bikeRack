@@ -1,65 +1,90 @@
+local lastVehicle, lastBike, vehicleId, bikeId = nil, nil, nil, nil
 
-local lastVehicle = nil
-local lastBike = nil
-local vehicleId = nil
-local bikeId = nil
-Citizen.CreateThread(function()
-    local sleeptime = 1500
-    while true do
-        if IsPedInAnyVehicle(PlayerPedId(),true) then
-            if GetEntitySpeed(GetVehiclePedIsIn(PlayerPedId())) <=2.0 then
-                if has_valueV(config.vehicle,GetEntityModel(GetVehiclePedIsIn(PlayerPedId()))) or has_value(config.bike,GetEntityModel(GetVehiclePedIsIn(PlayerPedId()))) then
-                    if has_value(config.bike,GetEntityModel(GetVehiclePedIsIn(PlayerPedId()))) then
-                        lastBike = GetVehiclePedIsIn(PlayerPedId())
-                        if lastVehicle ~= nil and GetEntityAttachedTo(lastBike) == 0 then
-                            if #(GetEntityCoords(lastVehicle)-GetEntityCoords(lastBike)) <= 10.0 then
-                                DrawMessage('Press ~g~K~w~ to attach')
-                                sleeptime = 5
-                                if IsControlJustPressed(0,311) then
-                                    TaskLeaveVehicle(PlayerPedId(),lastBike,0)
-                                    Wait(1500)
-                                    AttachEntityToEntity(lastBike,lastVehicle,GetEntityBoneIndexByName(lastVehicle,'mod_col_2'),config.vehicle[vehicleId].offset,config.bike[bikeId].rot,0,0,1,0,1,1)
-                                end
-                            end
-                        end
-                    else
-                        if vehicleId ~= nil then
-                            SetVehicleModKit(GetVehiclePedIsIn(PlayerPedId()),0)
-                           print(GetVehicleMod(GetVehiclePedIsIn(PlayerPedId()),config.vehicle[vehicleId].mType))
-                            if GetVehicleMod(GetVehiclePedIsIn(PlayerPedId()),config.vehicle[vehicleId].mType) == config.vehicle[vehicleId].mId then
-                                lastVehicle = GetVehiclePedIsIn(PlayerPedId())
-                                local vehs = GetGamePool('CVehicle')
-                                for i=1,#vehs,1 do
-                                    if GetEntityAttachedTo(vehs[i]) == lastVehicle then
-                                        sleeptime = 5
-                                        DrawMessage('Press ~g~K~w~ to attach')
-                                        if IsControlJustPressed(0,311) then
-                                            local coords = GetEntityCoords(lastVehicle)
-                                            DetachEntity(vehs[i],0,0)
-                                            SetEntityCoords(vehs[i],coords.x,coords.y+3.0,coords.z-5.0,false, false, false,false)
-                                            sleeptime = 1500
-                                        end
-                                    break
+function GetBike(hash)
+    for i=1, #config.bike do
+        if config.bike[i].bike == hash then
+            bikeId = i
+            return i
+        end
+    end
+end
+
+function GetVehicle(hash)
+    for i=1, #config.vehicle do
+        if config.vehicle[i].vehicle == hash then
+            vehicleId = i
+            return i
+        end
+    end
+end
+
+AddEventHandler("gameEventTriggered", function(name)
+    if name == 'CEventNetworkPlayerEnteredVehicle' then
+        local sleeptime = 1500
+        local CurrentVehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+        if GetBike(GetEntityModel(CurrentVehicle)) or GetVehicle(GetEntityModel(CurrentVehicle)) then
+            while true do
+                local Ped = PlayerPedId()
+                if GetVehiclePedIsIn(Ped) == CurrentVehicle then
+                    if GetEntitySpeed(CurrentVehicle) <= 2.0 then
+                        if GetBike(GetEntityModel(CurrentVehicle)) then
+                            lastBike = CurrentVehicle
+                            if lastVehicle and GetEntityAttachedTo(lastBike) == 0 then
+                                if #(GetEntityCoords(lastVehicle) - GetEntityCoords(lastBike)) <= 10.0 then
+                                    DrawMessage('Press ~g~K~s~ to attach')
+                                    sleeptime = 5
+                                    if IsControlJustPressed(0, 311) then
+                                        TaskLeaveVehicle(Ped, lastBike, 0)
+                                        Wait(1500)
+                                        AttachEntityToEntity(lastBike, lastVehicle, GetEntityBoneIndexByName(lastVehicle, 'mod_col_2'), config.vehicle[vehicleId].offset, config.bike[bikeId].rot, 0, 0, 1, 0, 1, 1)
                                     end
                                 end
-                            else
-                                lastVehicle = nil
-                                vehicleId = nil
                             end
-                        end 
+                        elseif GetVehicle(GetEntityModel(CurrentVehicle)) then
+                            lastVehicle = CurrentVehicle
+                            SetVehicleModKit(CurrentVehicle, 0)
+                            if GetVehicleMod(CurrentVehicle, config.vehicle[vehicleId].mType) == config.vehicle[vehicleId].mId then
+                                lastVehicle = CurrentVehicle
+                                local Vehs = GetGamePool('CVehicle')
+                                if GetEntityAttachedTo(lastBike) == lastVehicle then
+                                    sleeptime = 5
+                                    DrawMessage('Press ~g~K~s~ to detach')
+                                    if IsControlJustPressed(0, 311) then
+                                        local Coords = GetEntityCoords(lastVehicle)
+                                        DetachEntity(lastBike, 0, 0)
+                                        SetEntityCoords(lastBike,Coords.x,Coords.y+3.0,Coords.z-5.0,false, false, false,false)
+                                        sleeptime = 1500
+                                    end
+                                else
+                                    for i=1, #Vehs do
+                                        if GetEntityAttachedTo(Vehs[i]) == lastVehicle then
+                                            sleeptime = 5
+                                            DrawMessage('Press ~g~K~s~ to detach')
+                                            if IsControlJustPressed(0, 311) then
+                                                local Coords = GetEntityCoords(lastVehicle)
+                                                DetachEntity(Vehs[i], 0, 0)
+                                                SetEntityCoords(Vehs[i],Coords.x,Coords.y+3.0,Coords.z-5.0,false, false, false,false)
+                                                sleeptime = 1500
+                                            end
+                                        end
+                                    end
+                                end
+                            end
+                        else
+                            lastVehicle = nil
+                            vehicleId = nil
+                        end
                     end
+                else
+                    break
                 end
-                if sleeptime == 1500 then
-                    sleeptime = 2500
-                end
+                Wait(sleeptime)
             end
-            else
-                sleeptime = 1500
-            end
-        Wait(sleeptime)
+        end
     end
 end)
-function DrawMessage (message)
+
+function DrawMessage(message)
     SetTextFont(0)
     SetTextProportional(1)
     SetTextScale(0.0, 0.3)
@@ -71,25 +96,4 @@ function DrawMessage (message)
     SetTextEntry("STRING")
     AddTextComponentString(message)
     DrawText(0.035, 0.755)
-end
-
-function has_value(tab, val)
-    for i=1,#tab,1 do
-        local vehicle = tab[i].bike
-        if vehicle == val then
-            bikeId = i
-            return i
-        end
-    end
-    return false
-end
-function has_valueV(tab, val)
-    for i=1,#tab,1 do
-        local vehicle = tab[i].vehicle
-        if vehicle == val then
-            vehicleId = i
-            return i
-        end
-    end
-    return false
 end
