@@ -24,8 +24,14 @@ config.vehicle = {
         mId=0,
         offset = vector3(0.05,-3.30,0.40),
     },
+    {
+        vehicle = `18taurusw`,
+        mType=2,
+        mId=0,
+        offset = vector3(0.05,-3.11,0.38),
+    },
 	
-	{
+    {
         vehicle = `16fpiuw`,
         mType=43,
         mId=0,
