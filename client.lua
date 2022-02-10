@@ -25,7 +25,6 @@ Citizen.CreateThread(function()
                     else
                         if vehicleId ~= nil then
                             SetVehicleModKit(GetVehiclePedIsIn(PlayerPedId()),0)
-                           print(GetVehicleMod(GetVehiclePedIsIn(PlayerPedId()),config.vehicle[vehicleId].mType))
                             if GetVehicleMod(GetVehiclePedIsIn(PlayerPedId()),config.vehicle[vehicleId].mType) == config.vehicle[vehicleId].mId then
                                 lastVehicle = GetVehiclePedIsIn(PlayerPedId())
                                 local vehs = GetGamePool('CVehicle')
