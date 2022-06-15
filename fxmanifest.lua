@@ -30,6 +30,7 @@
 
 fx_version 'adamant'
 game 'gta5'
+lua54 'yes'
 
 description 'Redneck Modifications | Double trailer Script'
 authors 'Nick-VD'
