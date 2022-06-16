@@ -96,6 +96,7 @@ config = {
             mType=0,
             mId=0,
             off
+        }
         {
             vehicle = `18chargervs`,
             mType=0,
@@ -211,4 +212,5 @@ config = {
             bike = `scorcher`,
             rot = vector3(0.0,-25.0,90.0)
         }
+    }
 }
