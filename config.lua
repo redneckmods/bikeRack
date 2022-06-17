@@ -98,7 +98,7 @@ config =
             mType=0,
             mId=0,
             off
-        }
+        },
         {
             vehicle = `18chargervs`,
             mType=0,
